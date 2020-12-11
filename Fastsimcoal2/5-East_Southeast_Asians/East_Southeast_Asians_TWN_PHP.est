@@ -1,0 +1,55 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name   #dist.#min  #max
+//all Ns are in number of haploid individuals
+1  NAHA            unif     40096 40096 output bounded REFERENCE
+1  N_Fil  	       unif     100   1e5   output
+1  N_Paiwan	       unif     100   1e5   output
+1  N_HAN           unif     100   1e5   output
+1  NPNG$           unif     100   1e5   output
+1  NBOTtaiw$       unif     10    5000  output
+1  NBOTfil$       unif     10    5000  output
+1  NancSEA$        unif     100   1e5   output
+1  NaHan           unif     100   1e5   output
+1  NBOTNG$         unif     10   5000  output
+0  multasea        unif     1e-3  1     hide    bounded
+0  multtaiwfil     unif     1e-3  1     hide    bounded
+
+0  NM710         logunif     0.0001  100   output    bounded
+0  NM107         logunif     0.0001  100   output    bounded
+0  NM910         logunif     0.0001  100   output    bounded
+0  NM109         logunif     0.0001  100   output    bounded
+0  NMa107        logunif     0.0001  100   output    bounded
+0  NMa78         logunif     0.0001  100   output    bounded
+
+
+
+[RULES]
+
+[COMPLEX PARAMETERS]
+0  RESIZENG          = NBOTNG$/NPNG$              hide
+0  resizeSEA         = NancSEA$/NBOTtaiw$         hide
+0  BOTTAIW$          = NBOTtaiw$/N_Paiwan          hide
+0  BOTFIL$           = NBOTfil$/N_Fil             hide
+0  resizeHAN         = NaHan/N_HAN                hide
+
+
+1  TPlusseahan       = 1462*multasea    hide
+1  TD_SEAHAN         = 200+TPlusseahan  output
+
+
+1  TforTaiw          = TD_SEAHAN-15              hide
+1  TPlustAiw         = TforTaiw*multtaiwfil 		 hide
+1  TD_TaiwFil        = 15+TPlustAiw              output
+
+1  TBOT$             = TD_TaiwFil-10             output
+
+
+0 MIG710       =   NM710/N_Paiwan           hide
+0 MIG107       =   NM107/N_HAN              hide
+0 MIG910       =   NM910/N_Paiwan           hide
+0 MIG109       =   NM109/N_Fil              hide
+0 MIGa107       =  NMa107/N_HAN             hide
+0 MIGa78       =   NMa78/NPNG$              hide

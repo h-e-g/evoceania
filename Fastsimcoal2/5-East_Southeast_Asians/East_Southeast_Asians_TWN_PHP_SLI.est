@@ -1,0 +1,108 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name   #dist.#min  #max
+//all Ns are in number of haploid individuals
+1  NAHA            unif     40096 40096 output bounded REFERENCE
+1  N_PNG	         unif     100   1e5   output
+1  N_VL 	         unif     100   1e5   output
+1  N_Fil  	       unif     100   1e5   output
+1  N_Paiwan	       unif     100   1e5   output
+1  N_HAN           unif     100   1e5   output
+1  N_NOGhost	     unif     100   1e5   output
+1  N_Ghost	       unif     100   1e5   output
+1  N_ANCMELA       unif     100   1e5   output
+1  N_ANCHAN        unif     100   1e5   output
+1  NaSEA           unif     100   1e5   output
+1  NBotTaiw$       unif     10    5000  output
+1  NBotFIL$        unif     10    5000  output
+1  NBotgh$         unif     10    5000  output
+1  NaFilGhost$     unif     100   1e5   output
+
+0  multPgGh        unif     1e-3  1     hide    bounded
+0  multHANother    unif     1e-3  1     hide    bounded
+0  multVLGH        unif     1e-3  1     hide    bounded
+0  multanctaiw     unif     1e-3  1     hide    bounded
+0  multpolFil      unif     1e-3  1     hide    bounded
+0  multadpo        unif     1e-3  1     hide    bounded
+
+0  NM117         logunif     0.0001  100   output    bounded
+0  NM711         logunif     0.0001  100   output    bounded
+0  NM128         logunif     0.0001  100   output    bounded
+0  NM1013         logunif     0.0001  100   output    bounded
+0  NM1310         logunif     0.0001  100   output    bounded
+0  NM1011        logunif     0.0001  100   output    bounded
+0  NM1110        logunif     0.0001  100   output    bounded
+0  NM129        logunif     0.0001  100   output    bounded
+0  NM912        logunif     0.0001  100   output    bounded
+
+0  NMa1110        logunif     0.0001  100   output    bounded
+0  NMa1011        logunif     0.0001  100   output    bounded
+
+0  NMa117        logunif     0.0001  100   output    bounded
+
+0  NMa78         logunif     0.0001  100   output    bounded
+
+0  adPVL          logunif     0.00001    1     output  bounded
+
+
+
+[RULES]
+
+[COMPLEX PARAMETERS]
+
+1  TforHAN          = multPgGh*862               hide
+1  TD_Gh_PNG        = 800+TforHAN                 output
+
+1  TforHAnsea       = TD_Gh_PNG - 250            hide
+1  TPlusHanSeA      = multHANother*TforHAnsea    hide
+1  TD_HANSEA        = 250+TPlusHanSeA            output
+
+1  TforVL           =  TD_HANSEA-200             hide
+1  TPlusVl          =  multVLGH*TforVL           hide
+1  TD_Gh_VL         =  200+TPlusVl              output
+
+
+1  TforTaiw          = TD_Gh_VL-110  hide
+1  TPlustAiw         = TforTaiw*multanctaiw		 hide
+1  TD_TAIW          = 110+TPlustAiw		    output
+
+1  TBOTTAIW$        = TD_TAIW-10                  output
+
+
+1  TforGh           = TBOTTAIW$-15          hide
+1  TPLUSGH           = TforGh*multpolFil            hide
+1  TD_FilGhost      = 15+TPLUSGH         output
+1  TBOTFILGHOST$    = TD_FilGhost-10               output
+
+
+1  TAdm_VL           = TD_FilGhost*multadpo output
+
+
+0  BOTGH$        = NBotgh$/N_Ghost          hide
+0  BOTFIL$       = NBotFIL$/N_Fil           hide
+0  RESIZEFILGH$  = NaFilGhost$/NBotFIL$     hide
+0  BOTtaiw$      = NBotTaiw$/N_Paiwan       hide
+0  RESIZESEA$    = NaSEA/NBotTaiw$          hide
+0  RESIZEHAN$    = N_ANCHAN/N_HAN           hide
+0  RESIZEPNG     = N_ANCMELA/N_PNG           hide
+0  ResBotOc      = 429/N_ANCMELA            hide
+
+
+0 MIG117         = NM117/N_HAN              hide
+0 MIG711         = NM711/N_Paiwan           hide
+0 MIG128         = NM128/N_PNG               hide
+0 MIG1013        = NM1013/N_Ghost           hide
+0 MIG1310        = NM1310/N_Fil             hide
+0 MIG1011        = NM1011/N_Paiwan          hide
+0 MIG1110        = NM1110/N_Fil             hide
+0 MIG129         = NM129/N_VL               hide
+0 MIG912         = NM912/N_NOGhost          hide
+
+0 MIGa1110       = NMa1110/NaFilGhost$      hide
+0 MIGa1011       = NMa1011/N_Paiwan         hide
+
+0 MIGa117        = NMa117/N_HAN             hide
+
+0 MIGa78         = NMa78/N_PNG               hide

@@ -1,0 +1,97 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name   #dist.#min  #max
+//all Ns are in number of haploid individuals
+1  NAHA            unif     100   1e5   output REFERENCE
+1  N_Daltai        unif     100   1e4   output
+1  N_ghost_D       unif     100   1e5   output
+1  N_Nvindija      unif     100   1e4   output
+1  N_ghost_V       unif     100   1e5   output
+1  N_Eu            unif     100   1e5   output
+1  N_As            unif     100   1e5   output
+1  N_PNG           unif     100   1e5   output
+1  N_Bun           unif     100   1e5   output
+1  N_Kun           unif     100   1e5   output
+1  N_Paiw          unif     100   1e5   output
+
+1  N_AAsEu   	     unif     100   1e5  output
+1  N_HS            unif     100   1e5  output
+1  N_BotOc         unif     10    5000  output
+1  N_BotEuAs       unif     10    5000  output
+1  N_stBot         unif     10    5000  output
+
+
+1  TD_HA           unif     19001  27000  output bounded
+1  TNea$           unif     3100   4700   output bounded
+1  TDeni$          unif     9500   14000  output bounded
+1  TArch$          unif     14001  17000  output bounded
+
+0  multOoAOc       unif     1e-3  1     hide    bounded
+0  multstBot       unif     1e-3  1     hide    bounded
+0  multAsEu        unif     1e-3  1     hide    bounded
+0  multOoAEuAs     unif     1e-3  1     hide    bounded
+0  multHanTaiw     unif     1e-3  1     hide    bounded
+0  multstNeaAdm    unif     1e-3  1     hide    bounded
+0  multadmneaEuAs  unif     1e-3  1     hide    bounded
+0  multadmDen      unif     0.5   1     hide    bounded
+
+0  adDen           unif     0.03  0.06  output  bounded
+0  adNeaEuAs       unif     1e-6  0.10  output  bounded
+0  adNeast         unif     1e-6  0.10  output  bounded
+
+0  MIG56          logunif     1e-6  1e-3  output    bounded
+0  MIG67          logunif     1e-6  1e-3  output    bounded
+0  MIG711         logunif     1e-6  1e-3  output    bounded
+0  MIG811         logunif     1e-6  1e-3  output    bounded
+0  MIG78          logunif     1e-6  1e-3  output    bounded
+0  MIGa68         logunif     1e-6  1e-3  output    bounded
+
+0  NMBUN$         logunif     0.0001 100  output
+0  NMKUN$         logunif     0.0001 100  output
+[RULES]
+
+[COMPLEX PARAMETERS]
+
+1  AuxforstBot     = multstBot*3386           hide
+1  TstBot          = 1000+AuxforstBot         output
+1  TendstBot       = TstBot-100			          hide
+
+1  Timefordiv      = TendstBot-500            hide
+1  Auxfordiv       = multOoAOc*Timefordiv     hide
+1  TD_OoAOc        = 500+Auxfordiv            output
+1  TBotOc          = TD_OoAOc-100             hide
+
+1  TimeforOaAEuAs  = TD_OoAOc-250                 hide
+1  AuxforOaAEuAs   = multOoAEuAs*TimeforOaAEuAs   hide
+1  TD_OoAEuAs      = 250+AuxforOaAEuAs            output
+1  TBotEuAs        = TD_OoAEuAs-100               hide
+
+1  Tforaseu$       = TBotEuAs-200                   hide
+1  AuxASEU$        = multAsEu*Tforaseu$             hide
+1  TD_AsEu         = AuxASEU$ + 200                 output
+
+1  TforAstaiw$     = TD_AsEu - 100                  hide
+1  AuxASTAIW$      = multHanTaiw*TforAstaiw$        hide
+1  TD_AsTaiw       = AuxASTAIW$+100                 output
+
+1  TforAdmEuAs     = TBotEuAs-TD_AsEu               hide
+1  AuxAdmEuAs      = TforAdmEuAs*multadmneaEuAs     hide
+1  TAdm_NeaEuAs    = TD_AsEu+AuxAdmEuAs             output
+
+1  TAdm_Den        = TBotOc*multadmDen 	            output
+1  TforstNeaAdm    = TendstBot-TD_OoAOc             hide
+1  AuxforsfNeaAdm  = TforstNeaAdm*multstNeaAdm      hide
+1  TAdm_NeaAnc     = TD_OoAOc+AuxforsfNeaAdm        output
+
+0  ResAsEu    	   = N_AAsEu/N_Eu             hide
+0  ResBotOc        = N_BotOc/N_PNG            hide
+0  ResBotEuAs      = N_BotEuAs/N_AAsEu        hide
+0  ResMH           = N_HS/54244               hide
+0  ResAnc          = NAHA/N_ghost_V           hide
+0  ResstBot        = N_stBot/9538    	        hide
+0  ResEndstBot     = 9538/N_stBot             hide
+
+0 MIGBUN$          = NMBUN$/N_Bun             hide
+0 MIGKUN$          = NMKUN$/N_Kun             hide

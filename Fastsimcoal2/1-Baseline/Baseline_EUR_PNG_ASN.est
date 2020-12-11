@@ -1,0 +1,99 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name   #dist.#min  #max
+//all Ns are in number of haploid individuals
+1  NAHA            unif     100   1e5   output REFERENCE
+1  N_Daltai        unif     100   1e4   output
+1  N_ghost_D       unif     100   1e5   output
+1  N_Nvindija      unif     100   1e4   output
+1  N_ghost_V       unif     100   1e5   output
+1  N_Eu            unif     100   1e5   output
+1  N_As            unif     100   1e5   output
+1  N_PNG           unif     100   1e5   output
+1  N_Bun           unif     100   1e5   output
+1  N_Kun           unif     100   1e5   output
+1  N_Paiw          unif     100   1e5   output
+
+1  N_AAsPgAus	     unif     100   1e5  output
+1  N_HS            unif     100   1e5  output
+1  N_BotOcAs       unif     10    5000  output
+1  N_BotEu         unif     10    5000  output
+1  N_stBot         unif     10    5000  output
+
+
+1  TD_HA           unif     19001  27000  output bounded
+1  TNea$           unif     3100   4700   output bounded
+1  TDeni$          unif     9500   14000  output bounded
+1  TArch$          unif     14001  17000  output bounded
+
+0  multOoAOcAs     unif     1e-3  1     hide    bounded
+0  multstBot       unif     1e-3  1     hide    bounded
+0  multAsPgAus     unif     1e-3  1     hide    bounded
+0  multOoAEu       unif     1e-3  1     hide    bounded
+0  multstNeaAdm    unif     1e-3  1     hide    bounded
+0  multadmDen      unif     0.5   1     hide    bounded
+0  multadmneaEu    unif     0.5   1     hide    bounded
+0  multHanTaiw     unif     1e-3  1     hide    bounded
+
+0  adDen           unif     0.03  0.06   output  bounded
+0  adNeaEu         unif     1e-6  0.10  output  bounded
+0  adNeast         unif     1e-6  0.10  output  bounded
+
+0  MIG56           logunif     1e-6  1e-3  output    bounded
+0  MIG67           logunif     1e-6  1e-3  output    bounded
+0  MIG711          logunif     1e-6  1e-3  output    bounded
+0  MIG811          logunif     1e-6  1e-3  output    bounded
+0  MIG78           logunif     1e-6  1e-3  output    bounded
+0  MIGa67          logunif     1e-6  1e-3  output    bounded
+
+0  NMBUN$          logunif     0.0001 100  output
+0  NMKUN$          logunif     0.0001 100  output
+
+[RULES]
+
+[COMPLEX PARAMETERS]
+
+
+1  AuxforstBot     = multstBot*3386   hide
+1  TstBot          = 1000+AuxforstBot         output
+1  TendstBot       = TstBot-100		    hide
+
+1  Timefordiv      = TendstBot-500            hide
+1  Auxfordiv       = multOoAOcAs*Timefordiv   hide
+1  TD_OoAOcAs      = 500+Auxfordiv            output
+1  TBotOcAs        = TD_OoAOcAs-100           hide
+
+1  TimeforOaAEu    = TD_OoAOcAs-250           hide
+1  AuxforOaAEu     = multOoAEu*TimeforOaAEu   hide
+1  TD_OoAEu        = 250+AuxforOaAEu          output
+1  TBotEu          = TD_OoAEu-100             hide
+
+1  TimeforASPG     = TBotEu - 200             hide
+1  Auxforaspg      = TimeforASPG * multAsPgAus hide
+1  TD_AsPgAus      = Auxforaspg  + 200      output
+
+1  TforAstaiw$     = TD_AsPgAus-100                  hide
+1  AuxASTAIW$      = multHanTaiw*TforAstaiw$         hide
+1  TD_AsTaiw       = AuxASTAIW$+100                  output
+
+
+1  TAdm_Den        = TD_AsPgAus*multadmDen    output
+
+1  TAdm_NeaEu      = TBotEu*multadmneaEu      output
+
+1  TforstNeaAdm    = TendstBot-TD_OoAOcAs     hide
+1  AuxforsfNeaAdm  = TforstNeaAdm*multstNeaAdm hide
+1  TAdm_NeaAnc     = TD_OoAOcAs+AuxforsfNeaAdm  output
+
+0  ResAsPgAus	     = N_AAsPgAus/N_As          hide
+0  ResBotOcAs      = N_BotOcAs/N_AAsPgAus     hide
+0  ResBotEu        = N_BotEu/N_Eu             hide
+0  ResMH           = N_HS/54244              hide
+0  ResAnc          = NAHA/N_ghost_V             hide
+0  ResstBot        = N_stBot/9538   	    hide
+0  ResEndstBot     = 9538/N_stBot           hide
+
+0  MIGBUN$          = NMBUN$/N_Bun             hide
+0  MIGKUN$          = NMKUN$/N_Kun             hide

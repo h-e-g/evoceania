@@ -1,0 +1,71 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name   #dist.#min  #max
+//all Ns are in number of haploid individuals
+1  NAHA            unif     40096 40096 output bounded REFERENCE
+1  N_Pg  	         unif     100   1e5   output
+1  N_BA 	         unif     100   1e5   output
+1  N_SOL  	       unif     100   1e5   output
+1  N_AAus	         unif     100   1e5   output
+1  N_APgAus	       unif     100   1e5   output
+1  N_BotOc         unif     10    5000  output
+
+0  multWEAus       unif     1e-3  1     hide    bounded
+0  multPgAus       unif     1e-3  1     hide    bounded
+
+
+0  multden         unif     1e-3  1     hide    bounded
+0  multadpaiw      unif     1e-3  1     hide    bounded
+
+
+0  NM89          logunif     0.0001  100   output    bounded
+0  NM108         logunif     0.0001  100   output    bounded
+0  NM810         logunif     0.0001  100   output    bounded
+0  NM1110        logunif     0.0001  100   output    bounded
+0  NM1011        logunif     0.0001  100   output    bounded
+
+0  NMa810        logunif     0.0001  100   output    bounded
+0  NMa108        logunif     0.0001  100   output    bounded
+0  NM78          logunif     0.0001  100   output    bounded
+
+0  adPaiwBA      logunif     0.00001    1     output  bounded
+0  adPaiwVL      logunif     0.00001    1     output  bounded
+
+
+[RULES]
+
+[COMPLEX PARAMETERS]
+
+1  TforPgDiv     = multPgAus*1336           hide
+1  TD_PgBA       = 291+TforPgDiv             output
+
+1  Timeforadm    = 1893-TD_PgBA            hide
+
+1  Auxadmden     = Timeforadm*multden       hide
+1  TAdm_Den      = TD_PgBA+Auxadmden       output
+
+
+1  TforAusDiv    = TD_PgBA-291		    hide
+1  AuxDivAus	   = TforAusDiv*multWEAus	    hide
+1  TD_PgVL       = 291+AuxDivAus		    output
+
+
+1  TAdm_Paiw      = 291*multadpaiw output
+
+0  ResPgVL       = N_AAus/N_Pg              hide
+0  ResPgBA       = N_APgAus/N_AAus          hide
+0  ResBotOc      = N_BotOc/N_APgAus         hide
+
+
+0 MIG89          = NM89/3224                hide
+0 MIG108         = NM108/N_Pg               hide
+0 MIG810         = NM810/N_BA               hide
+0 MIG1110        = NM1110/N_BA              hide
+0 MIG1011        = NM1011/N_SOL             hide
+
+
+0 MIG78          = NM78/N_Pg                hide
+0 MIGa810        = NMa810/N_BA              hide
+0 MIGa108        = NMa108/N_AAus            hide

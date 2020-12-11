@@ -1,0 +1,97 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name   #dist.#min  #max
+//all Ns are in number of haploid individuals
+1  NAHA            unif     40096 40096 output bounded REFERENCE
+1  NEA_GST         unif     100   1e5   output
+1  N_Fil  	       unif     100   1e5   output
+1  N_POL  	       unif     100   1e5   output
+1  N_Paiwan	       unif     100   1e5   output
+1  N_HAN           unif     100   1e5   output
+1  NBOTtaiw$       unif     10    5000  output
+1  NBOTfil$        unif     10    5000  output
+1  NBOTpol$        unif     10    5000  output
+1  NancPOPHP       unif     100   1e5   output
+1  NancSEA$        unif     100   1e5   output
+1  NaHan           unif     100   1e5   output
+1  NallAsia        unif     100   1e5   output
+
+0  multagh         unif     1e-3  1     hide    bounded
+0  multint         unif     1e-3  1     hide    bounded
+0  multasea        unif     1e-3  1     hide    bounded
+0  multtaiwfil     unif     1e-3  1     hide    bounded
+0  multfili        unif     1e-3  1     hide    bounded
+0  multadmPOLGH    unif     1e-3  1     hide    bounded
+0  multadmH$         unif     1e-3  1     hide    bounded
+
+
+
+
+0  NMa1110		   logunif    0.0001  100   output    bounded
+0  NMa118          logunif    0.0001  100   output    bounded
+
+0 admHT$        logunif     0.00001  1   output    bounded
+0 admAncPoL$    logunif     0.00001  1   output    bounded
+0 admtwn$       logunif     0.00001  1   output    bounded
+0 admHan$       logunif     0.00001  1   output    bounded
+
+
+[RULES]
+
+[COMPLEX PARAMETERS]
+
+0  BOTFIL$           = NBOTfil$/N_Fil             hide
+0  BOTPOL$           = NBOTpol$/N_POL             hide
+0  BOTTWN$          = NBOTtaiw$/N_Paiwan         hide
+
+0  resizeFP$         = NancPOPHP/NBOTpol$		  hide
+0  resizeSEA         = NancSEA$/NBOTtaiw$         hide
+0  resizeHAN         = NaHan/NancSEA$             hide
+0  resizeGHHA        = NallAsia/NaHan             hide
+
+
+
+1  TPlusgho       = 1075*multagh  hide
+1  TD_GHHAN$      = 200+TPlusgho  output
+
+1 Tforintro$      = 1662-TD_GHHAN$ hide
+1 TPLUSINTR$      = Tforintro$*multint hide
+1 T_DENI_AS      = TD_GHHAN$+TPLUSINTR$ output
+
+1  TForHan        =  TD_GHHAN$-150 hide
+1  TPlusseahan    = TForHan*multasea    hide
+1  TD_SEAHAN      = 150+TPlusseahan  output
+
+
+1  TforTaiw          = TD_SEAHAN-100              hide
+1  TPlustAiw         = TforTaiw*multtaiwfil 		 hide
+1  TD_TaiwOt$       = 100+TPlustAiw              output
+
+1 TBOTTW$      = TD_TaiwOt$ - 10 output
+
+1 TfOrFIl      = TBOTTW$ - 35            hide
+1 Tplusfil	   = TfOrFIl*multfili        hide
+1 TD_FILPOL$   = 35 + Tplusfil           output
+
+
+1 scaling$     = TD_TaiwOt$ - 3 		hide
+1 tforadmPo$   = scaling$ - TD_FILPOL$ hide
+1 TPlUSadPO$   = tforadmPo$*multadmPOLGH hide
+1 Taancpo$     = TD_FILPOL$ + TPlUSadPO$ output
+
+1 TaTaiw$      = Taancpo$ + 1 output
+1 TaHaN$       = Taancpo$ + 2 output
+
+1  TBOT$       = TD_FILPOL$-10            output
+
+1 TaHT$        = TD_FILPOL$*multadmH$      output
+
+
+
+
+
+0 MIGa1110     =  NMa1110/N_Paiwan			hide
+
+0 MIGa118      =  NMa118/2696				hide

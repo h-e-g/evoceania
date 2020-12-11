@@ -1,0 +1,47 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name   #dist.#min  #max
+//all Ns are in number of haploid individuals
+1  NAHA            unif     40096 40096 output bounded REFERENCE
+1  N_VAN 	         unif     100   1e5   output
+
+0  multtdvan       unif     1e-3  1     hide    bounded
+0  multadpaiw      unif     1e-3  1     hide    bounded
+0  reladmasVAN     unif     1e-3  1     hide    bounded
+0  reladmbaVan     unif     1e-3  1     hide    bounded
+0  reladmPNGvan    unif     1e-3  1     hide    bounded
+
+0  NM128         logunif     0.0001  100   output    bounded
+0  NM1210        logunif     0.0001  100   output    bounded
+0  NM1012        logunif     0.0001  100   output    bounded
+0  NM1110        logunif     0.0001  100   output    bounded
+0  NM1011        logunif     0.0001  100   output    bounded
+
+
+0  adPaiwBA      logunif     0.00001    1     output  bounded
+0  adPaiwVL      logunif     0.00001    1     output  bounded
+0  adPaiwVAN     logunif     0.00001    1     output  bounded
+0  adVLVan       logunif     0.00001    1     output  bounded
+0  adPNGvan      logunif     0.00001    1     output  bounded
+
+[RULES]
+
+[COMPLEX PARAMETERS]
+
+1  TD_VAN         = 686*multtdvan      output
+1  TAdm_Paiw      = 297*multadpaiw     output
+
+1  MINIM          = TD_VAN %min% 297   hide
+1  TAdm_ASVAN     = MINIM*reladmasVAN  output
+1  TAdm_VLVan     = TD_VAN*reladmbaVan  output
+1  TAdm_PNGvan    = TD_VAN*reladmPNGvan output
+
+
+
+0 MIG1210        = NM1210/1415              hide
+0 MIG1012        = NM1012/64842             hide
+0 MIG1110        = NM1110/1415              hide
+0 MIG1011        = NM1011/5626             hide
+0 MIG128         = NM128/2696               hide

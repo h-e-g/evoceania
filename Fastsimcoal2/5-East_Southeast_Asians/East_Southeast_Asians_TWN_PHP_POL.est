@@ -1,0 +1,87 @@
+// Priors and rules file
+// *********************
+
+[PARAMETERS]
+//#isInt? #name   #dist.#min  #max
+//all Ns are in number of haploid individuals
+1  NAHA            unif     40096 40096 output bounded REFERENCE
+1  N_POL 	       unif     100   1e5   output
+1  N_Fil  	       unif     100   1e5   output
+1  N_HAN  	       unif     100   1e5   output
+1  NaHAN$          unif     100   1e5   output
+1  N_Paiwan	       unif     100   1e5   output
+1  N_Ghost	       unif     100   1e5   output
+1  N_ANCMELA       unif     100   1e5   output
+1  NaPAiw          unif     100   1e5   output
+1  NaPOIG          unif     100   1e5   output
+1  NBOTtaiw$       unif     10    5000  output
+1  NBOTpo$         unif     10    5000  output
+1  NBOTfil$        unif     10    5000  output
+
+0  multPgGh        unif     1e-3  1     hide    bounded
+0  multHANother    unif     1e-3  1     hide    bounded
+0  multanctaiw     unif     1e-3  1     hide    bounded
+0  multpolFil      unif     1e-3  1     hide    bounded
+0  multadpo        unif     1e-3  1     hide    bounded
+
+0  NM117         logunif     0.0001  100   output    bounded
+0  NM711         logunif     0.0001  100   output    bounded
+0  NM812         logunif     0.0001  100   output    bounded
+0  NM109         logunif     0.0001  100   output    bounded
+0  NM910         logunif     0.0001  100   output    bounded
+0  NM1011        logunif     0.0001  100   output    bounded
+0  NM1110        logunif     0.0001  100   output    bounded
+
+0  NMa1011        logunif     0.0001  100   output    bounded
+0  NMa1110        logunif     0.0001  100   output    bounded
+0  NMa711        logunif     0.0001  100   output    bounded
+0  NMa78         logunif     0.0001  100   output    bounded
+
+0  adPO          logunif     0.00001    1     output  bounded
+
+
+
+[RULES]
+
+[COMPLEX PARAMETERS]
+
+1  TforHAN           = multPgGh*1062               hide
+1  TD_Gh_PNG         = 600+TforHAN                 output
+
+1  TforHanother      = TD_Gh_PNG-150                hide
+1  TPlusHANOTher     = TforHanother*multHANother  hide
+1  TD_HANOTHER       = 150+TPlusHANOTher     output
+
+1  TforTaiw          = TD_HANOTHER-110  hide
+1  TPlustAiw         = TforTaiw*multanctaiw		 hide
+1  TD_aPAIW          = 110+TPlustAiw      output
+1  TBOTPAIW$         = TD_aPAIW - 10 output
+
+1  TforPo            = TBOTPAIW$-15                 hide
+1  TPLUSPO           = TforPo*multpolFil            hide
+1  TD_POFIL           = 15+TPLUSPO                   output
+1  TBOTPOFIL$        = TD_POFIL - 10 output
+1  TAdm_PO           = TD_POFIL*multadpo output
+
+
+0  RESIZEPOIG    = NaPOIG/NBOTfil$          hide
+0  RESIZEaPAIW   = NaPAiw/NBOTtaiw$         hide
+0  RESIZEPNG     = N_ANCMELA/2696           hide
+0  REZHAN$       = NaHAN$/N_HAN             hide
+0  ResBotOc      = 429/N_ANCMELA            hide
+0  BOTTaiw$      = NBOTtaiw$/N_Paiwan       hide
+0  BOTPO$        = NBOTpo$/N_POL            hide
+0  BOTFIL$       = NBOTfil$/N_Fil           hide
+
+0 MIG117         = NM117/N_HAN              hide
+0 MIG711         = NM711/N_Paiwan           hide
+0 MIG812         = NM812/2696               hide
+0 MIG109         = NM109/N_POL              hide
+0 MIG910         = NM910/N_Fil              hide
+0 MIG1011        = NM1011/N_Paiwan          hide
+0 MIG1110        = NM1110/N_Fil             hide
+
+0 MIGa1011       = NMa1011/N_Paiwan          hide
+0 MIGa1110       = NMa1110/NaPOIG            hide
+0 MIGa711        = NMa711/N_HAN             hide
+0 MIGa78         = NMa78/2696               hide
